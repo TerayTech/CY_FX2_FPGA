@@ -1,0 +1,18 @@
+Fitter Status : Successful - Mon Oct 25 14:21:53 2021
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Standard Edition
+Revision Name : fx2_in_top
+Top-level Entity Name : fx2_in_top
+Family : MAX 10
+Device : 10M50DAF484C6GES
+Timing Models : Preliminary
+Total logic elements : 1,004 / 49,760 ( 2 % )
+    Total combinational functions : 605 / 49,760 ( 1 % )
+    Dedicated logic registers : 804 / 49,760 ( 2 % )
+Total registers : 804
+Total pins : 27 / 360 ( 8 % )
+Total virtual pins : 0
+Total memory bits : 110,592 / 1,677,312 ( 7 % )
+Embedded Multiplier 9-bit elements : 0 / 288 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )
+UFM blocks : 0 / 1 ( 0 % )
+ADC blocks : 0 / 2 ( 0 % )

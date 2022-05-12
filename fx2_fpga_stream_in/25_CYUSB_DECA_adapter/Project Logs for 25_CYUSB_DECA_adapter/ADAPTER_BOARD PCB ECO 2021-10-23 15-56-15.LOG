@@ -1,0 +1,3 @@
+Removed Pin From Net: NetName=GND Pin=IFCLK-1
+Change Component Designator: OldDesignator=IFCLK NewDesignator=JP4
+Added Pin To Net: NetName=D27 Pin=JP4-1

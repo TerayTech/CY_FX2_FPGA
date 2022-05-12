@@ -1,0 +1,510 @@
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 1   
+
+
+C51 COMPILER V7.07, COMPILATION OF MODULE SLAVE
+OBJECT MODULE PLACED IN slave.OBJ
+COMPILER INVOKED BY: E:\keil_cypress\C51\BIN\C51.EXE slave.c OPTIMIZE(6,SPEED) DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #pragma NOIV                    // Do not generate interrupt vectors
+   2          //-----------------------------------------------------------------------------
+   3          //   File:      slave.c
+   4          //   Contents:  Hooks required to implement USB peripheral function.
+   5          //              Code written for FX2 REVE 56-pin and above.
+   6          //              This firmware is used to demonstrate FX2 Slave FIF
+   7          //              operation.
+   8          //   Copyright (c) 2003 Cypress Semiconductor All rights reserved
+   9          //-----------------------------------------------------------------------------
+  10          #include "fx2.h"
+  11          #include "fx2regs.h"
+  12          #include "fx2sdly.h"            // SYNCDELAY macro
+  13          
+  14          #define LED_ALL         (bmBIT0 | bmBIT1 | bmBIT2 | bmBIT3)
+  15          
+  16          extern BOOL GotSUD;             // Received setup data flag
+  17          extern BOOL Sleep;
+  18          extern BOOL Rwuen;
+  19          extern BOOL Selfpwr;
+  20          
+  21          BYTE Configuration;             // Current configuration
+  22          BYTE AlternateSetting;          // Alternate settings
+  23          static WORD xdata LED_Count = 0;
+  24          static BYTE xdata LED_Status = 0;
+  25          BOOL done_frm_fpga = 0;
+  26          
+  27          // EZUSB FX2 PORTA = slave fifo enable(s), when IFCFG[1:0]=11
+  28          //sbit PA0 = IOA ^ 0;             // alt. func., INT0#
+  29          //sbit PA1 = IOA ^ 1;             // alt. func., INT1#
+  30          // sbit PA2 = IOA ^ 2;          // is SLOE
+  31          //sbit PA3 = IOA ^ 3;             // alt. func., WU2
+  32          // sbit PA4 = IOA ^ 4;          // is FIFOADR0
+  33          // sbit PA5 = IOA ^ 5;          // is FIFOADR1
+  34          // sbit PA6 = IOA ^ 6;          // is PKTEND
+  35          // sbit PA7 = IOA ^ 7;          // is FLAGD
+  36          
+  37          // EZUSB FX2 PORTC i/o...       port NA for 56-pin FX2
+  38          // sbit PC0 = IOC ^ 0;
+  39          // sbit PC1 = IOC ^ 1;
+  40          // sbit PC2 = IOC ^ 2;
+  41          // sbit PC3 = IOC ^ 3;
+  42          // sbit PC4 = IOC ^ 4;
+  43          // sbit PC5 = IOC ^ 5;
+  44          // sbit PC6 = IOC ^ 6;
+  45          // sbit PC7 = IOC ^ 7;
+  46          
+  47          // EZUSB FX2 PORTB = FD[7:0], when IFCFG[1:0]=11
+  48          // sbit PB0 = IOB ^ 0;
+  49          // sbit PB1 = IOB ^ 1;
+  50          // sbit PB2 = IOB ^ 2;
+  51          // sbit PB3 = IOB ^ 3;
+  52          // sbit PB4 = IOB ^ 4;
+  53          // sbit PB5 = IOB ^ 5;
+  54          // sbit PB6 = IOB ^ 6;
+  55          // sbit PB7 = IOB ^ 7;
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 2   
+
+  56          
+  57          // EZUSB FX2 PORTD = FD[15:8], when IFCFG[1:0]=11 and WORDWIDE=1
+  58          //sbit PD0 = IOD ^ 0;
+  59          //sbit PD1 = IOD ^ 1;
+  60          //sbit PD2 = IOD ^ 2;
+  61          //sbit PD3 = IOD ^ 3;
+  62          //sbit PD4 = IOD ^ 4;
+  63          //sbit PD5 = IOD ^ 5;
+  64          //sbit PD6 = IOD ^ 6;
+  65          //sbit PD7 = IOD ^ 7;
+  66          
+  67          // EZUSB FX2 PORTE is not bit-addressable...
+  68          
+  69          //-----------------------------------------------------------------------------
+  70          // Task Dispatcher hooks
+  71          // The following hooks are called by the task dispatcher.
+  72          //-----------------------------------------------------------------------------
+  73          //void LED_Off (BYTE LED_Mask);
+  74          //void LED_On (BYTE LED_Mask);
+  75          
+  76          //-----------------------------------------------------------------------------
+  77          // Task Dispatcher hooks
+  78          //   The following hooks are called by the task dispatcher.
+  79          //-----------------------------------------------------------------------------
+  80          void TD_Init( void )
+  81          { // Called once at startup
+  82   1      
+  83   1        //设置8051的工作频率为48MHz
+  84   1        CPUCS = 0x12; // CLKSPD[1:0]=10, for 48MHz operation, output CLKOUT
+  85   1      
+  86   1        //配置FIFO标志输出，FLAG B配置为EP2 OUT FIFO空标志
+  87   1        PINFLAGSAB = 0x81;                    // FLAGB - EP2EF
+  88   1        SYNCDELAY;
+  89   1      
+  90   1        //配置FIFO标志输出，FLAG C配置为EP6 IN FIFO满标志
+  91   1        PINFLAGSCD = 0x1E;                    // FLAGC - EP6FF
+  92   1        SYNCDELAY;
+  93   1      
+  94   1         //配置FIFO标志输出，FLAG G配置为EP2 OUT FIFO空标志
+  95   1        PORTACFG |= 0x80;
+  96   1      
+  97   1        SYNCDELAY;
+  98   1      //Slave使用内部48MHz的时钟
+  99   1        IFCONFIG = 0xA3; //Internal clock, 48 MHz, Slave FIFO interface E3
+ 100   1        SYNCDELAY;
+ 101   1       
+ 102   1      //将EP2断端点配置为BULK-OUT端点，使用4倍缓冲，512字节FIFO             
+ 103   1        EP2CFG = 0xA0;                //out 512 bytes, 4x, bulk
+ 104   1        SYNCDELAY;
+ 105   1      //将EP6配置为BULK-OUT端点，                    
+ 106   1        EP6CFG = 0xE0;                // in 512 bytes, 4x, bulk
+ 107   1        SYNCDELAY;              
+ 108   1        EP4CFG = 0x02;                //clear valid bit
+ 109   1        SYNCDELAY;                     
+ 110   1        EP8CFG = 0x02;                //clear valid bit
+ 111   1        SYNCDELAY;   
+ 112   1      
+ 113   1        //复位FIFO
+ 114   1        SYNCDELAY;
+ 115   1        FIFORESET = 0x80;             // activate NAK-ALL to avoid race conditions
+ 116   1        SYNCDELAY;                    // see TRM section 15.14
+ 117   1        FIFORESET = 0x02;             // reset, FIFO 2
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 3   
+
+ 118   1        SYNCDELAY;                    // 
+ 119   1        FIFORESET = 0x04;             // reset, FIFO 4
+ 120   1        SYNCDELAY;                    // 
+ 121   1        FIFORESET = 0x06;             // reset, FIFO 6
+ 122   1        SYNCDELAY;                    // 
+ 123   1        FIFORESET = 0x08;             // reset, FIFO 8
+ 124   1        SYNCDELAY;                    // 
+ 125   1        FIFORESET = 0x00;             // deactivate NAK-ALL
+ 126   1      
+ 127   1      
+ 128   1        // handle the case where we were already in AUTO mode...
+ 129   1        // ...for example: back to back firmware downloads...
+ 130   1        SYNCDELAY;                    // 
+ 131   1        EP2FIFOCFG = 0x00;            // AUTOOUT=0, WORDWIDE=1
+ 132   1        
+ 133   1        // core needs to see AUTOOUT=0 to AUTOOUT=1 switch to arm endp's
+ 134   1        
+ 135   1        SYNCDELAY;                    // 
+ 136   1        EP2FIFOCFG = 0x11;            // AUTOOUT=1, WORDWIDE=1
+ 137   1        
+ 138   1        SYNCDELAY;                    // 
+ 139   1        EP6FIFOCFG = 0x0D;            // AUTOIN=1, ZEROLENIN=1, WORDWIDE=1
+ 140   1      
+ 141   1        SYNCDELAY;
+ 142   1      }
+ 143          
+ 144          void TD_Poll( void )
+ 145          { // Called repeatedly while the device is idle
+ 146   1      
+ 147   1      }
+ 148          
+ 149          BOOL TD_Suspend( void )          
+ 150          { // Called before the device goes into suspend mode
+ 151   1         return( TRUE );
+ 152   1      }
+ 153          
+ 154          BOOL TD_Resume( void )          
+ 155          { // Called after the device resumes
+ 156   1         return( TRUE );
+ 157   1      }
+ 158          
+ 159          //-----------------------------------------------------------------------------
+ 160          // Device Request hooks
+ 161          //   The following hooks are called by the end point 0 device request parser.
+ 162          //-----------------------------------------------------------------------------
+ 163          BOOL DR_GetDescriptor( void )
+ 164          {
+ 165   1         return( TRUE );
+ 166   1      }
+ 167          
+ 168          BOOL DR_SetConfiguration( void )   
+ 169          { // Called when a Set Configuration command is received
+ 170   1        
+ 171   1        if( EZUSB_HIGHSPEED( ) )
+ 172   1        { // ...FX2 in high speed mode
+ 173   2          EP6AUTOINLENH = 0x02;
+ 174   2          SYNCDELAY;
+ 175   2          EP8AUTOINLENH = 0x02;   // set core AUTO commit len = 512 bytes
+ 176   2          SYNCDELAY;
+ 177   2          EP6AUTOINLENL = 0x00;
+ 178   2          SYNCDELAY;
+ 179   2          EP8AUTOINLENL = 0x00;
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 4   
+
+ 180   2        }
+ 181   1        else
+ 182   1        { // ...FX2 in full speed mode
+ 183   2          EP6AUTOINLENH = 0x00;
+ 184   2          SYNCDELAY;
+ 185   2          EP8AUTOINLENH = 0x00;   // set core AUTO commit len = 64 bytes
+ 186   2          SYNCDELAY;
+ 187   2          EP6AUTOINLENL = 0x40;
+ 188   2          SYNCDELAY;
+ 189   2          EP8AUTOINLENL = 0x40;
+ 190   2        }
+ 191   1            
+ 192   1        Configuration = SETUPDAT[ 2 ];
+ 193   1        return( TRUE );        // Handled by user code
+ 194   1      }
+ 195          
+ 196          BOOL DR_GetConfiguration( void )   
+ 197          { // Called when a Get Configuration command is received
+ 198   1         EP0BUF[ 0 ] = Configuration;
+ 199   1         EP0BCH = 0;
+ 200   1         EP0BCL = 1;
+ 201   1         return(TRUE);          // Handled by user code
+ 202   1      }
+ 203          
+ 204          BOOL DR_SetInterface( void )       
+ 205          { // Called when a Set Interface command is received
+ 206   1         AlternateSetting = SETUPDAT[ 2 ];
+ 207   1         return( TRUE );        // Handled by user code
+ 208   1      }
+ 209          
+ 210          BOOL DR_GetInterface( void )       
+ 211          { // Called when a Set Interface command is received
+ 212   1         EP0BUF[ 0 ] = AlternateSetting;
+ 213   1         EP0BCH = 0;
+ 214   1         EP0BCL = 1;
+ 215   1         return( TRUE );        // Handled by user code
+ 216   1      }
+ 217          
+ 218          BOOL DR_GetStatus( void )
+ 219          {
+ 220   1         return( TRUE );
+ 221   1      }
+ 222          
+ 223          BOOL DR_ClearFeature( void )
+ 224          {
+ 225   1         return( TRUE );
+ 226   1      }
+ 227          
+ 228          BOOL DR_SetFeature( void )
+ 229          {
+ 230   1         return( TRUE );
+ 231   1      }
+ 232          
+ 233          BOOL DR_VendorCmnd( void )
+ 234          {
+ 235   1        return( TRUE );
+ 236   1      }
+ 237          
+ 238          //-----------------------------------------------------------------------------
+ 239          // USB Interrupt Handlers
+ 240          //   The following functions are called by the USB interrupt jump table.
+ 241          //-----------------------------------------------------------------------------
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 5   
+
+ 242          
+ 243          // Setup Data Available Interrupt Handler
+ 244          void ISR_Sudav( void ) interrupt 0
+ 245          {
+ 246   1         GotSUD = TRUE;         // Set flag
+ 247   1         EZUSB_IRQ_CLEAR( );
+ 248   1         USBIRQ = bmSUDAV;      // Clear SUDAV IRQ
+ 249   1      }
+ 250          
+ 251          // Setup Token Interrupt Handler
+ 252          void ISR_Sutok( void ) interrupt 0
+ 253          {
+ 254   1         EZUSB_IRQ_CLEAR( );
+ 255   1         USBIRQ = bmSUTOK;      // Clear SUTOK IRQ
+ 256   1      }
+ 257          
+ 258          void ISR_Sof( void ) interrupt 0
+ 259          {
+ 260   1         EZUSB_IRQ_CLEAR( );
+ 261   1         USBIRQ = bmSOF;        // Clear SOF IRQ
+ 262   1      }
+ 263          
+ 264          void ISR_Ures( void ) interrupt 0
+ 265          {
+ 266   1         if ( EZUSB_HIGHSPEED( ) )
+ 267   1         {
+ 268   2            pConfigDscr = pHighSpeedConfigDscr;
+ 269   2            pOtherConfigDscr = pFullSpeedConfigDscr;
+ 270   2         }
+ 271   1         else
+ 272   1         {
+ 273   2            pConfigDscr = pFullSpeedConfigDscr;
+ 274   2            pOtherConfigDscr = pHighSpeedConfigDscr;
+ 275   2         }
+ 276   1         
+ 277   1         EZUSB_IRQ_CLEAR( );
+ 278   1         USBIRQ = bmURES;       // Clear URES IRQ
+ 279   1      }
+ 280          
+ 281          void ISR_Susp( void ) interrupt 0
+ 282          {
+ 283   1         Sleep = TRUE;
+ 284   1         EZUSB_IRQ_CLEAR( );
+ 285   1         USBIRQ = bmSUSP;
+ 286   1      }
+ 287          
+ 288          void ISR_Highspeed( void ) interrupt 0
+ 289          {
+ 290   1         if ( EZUSB_HIGHSPEED( ) )
+ 291   1         {
+ 292   2            pConfigDscr = pHighSpeedConfigDscr;
+ 293   2            pOtherConfigDscr = pFullSpeedConfigDscr;
+ 294   2         }
+ 295   1         else
+ 296   1         {
+ 297   2            pConfigDscr = pFullSpeedConfigDscr;
+ 298   2            pOtherConfigDscr = pHighSpeedConfigDscr;
+ 299   2         }
+ 300   1      
+ 301   1         EZUSB_IRQ_CLEAR( );
+ 302   1         USBIRQ = bmHSGRANT;
+ 303   1      }
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 6   
+
+ 304          void ISR_Ep0ack( void ) interrupt 0
+ 305          {
+ 306   1      }
+ 307          void ISR_Stub( void ) interrupt 0
+ 308          {
+ 309   1      }
+ 310          void ISR_Ep0in( void ) interrupt 0
+ 311          {
+ 312   1      }
+ 313          void ISR_Ep0out( void ) interrupt 0
+ 314          {
+ 315   1      }
+ 316          void ISR_Ep1in( void ) interrupt 0
+ 317          {
+ 318   1      }
+ 319          void ISR_Ep1out( void ) interrupt 0
+ 320          {
+ 321   1      }
+ 322          void ISR_Ep2inout( void ) interrupt 0
+ 323          {
+ 324   1      }
+ 325          void ISR_Ep4inout( void ) interrupt 0
+ 326          {
+ 327   1      }
+ 328          void ISR_Ep6inout( void ) interrupt 0
+ 329          {
+ 330   1      }
+ 331          void ISR_Ep8inout( void ) interrupt 0
+ 332          {
+ 333   1      }
+ 334          void ISR_Ibn( void ) interrupt 0
+ 335          {
+ 336   1      }
+ 337          void ISR_Ep0pingnak( void ) interrupt 0
+ 338          {
+ 339   1      }
+ 340          void ISR_Ep1pingnak( void ) interrupt 0
+ 341          {
+ 342   1      }
+ 343          void ISR_Ep2pingnak( void ) interrupt 0
+ 344          {
+ 345   1      }
+ 346          void ISR_Ep4pingnak( void ) interrupt 0
+ 347          {
+ 348   1      }
+ 349          void ISR_Ep6pingnak( void ) interrupt 0
+ 350          {
+ 351   1      }
+ 352          void ISR_Ep8pingnak( void ) interrupt 0
+ 353          {
+ 354   1      }
+ 355          void ISR_Errorlimit( void ) interrupt 0
+ 356          {
+ 357   1      }
+ 358          void ISR_Ep2piderror( void ) interrupt 0
+ 359          {
+ 360   1      }
+ 361          void ISR_Ep4piderror( void ) interrupt 0
+ 362          {
+ 363   1      }
+ 364          void ISR_Ep6piderror( void ) interrupt 0
+ 365          {
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 7   
+
+ 366   1      }
+ 367          void ISR_Ep8piderror( void ) interrupt 0
+ 368          {
+ 369   1      }
+ 370          void ISR_Ep2pflag( void ) interrupt 0
+ 371          {
+ 372   1      }
+ 373          void ISR_Ep4pflag( void ) interrupt 0
+ 374          {
+ 375   1      }
+ 376          void ISR_Ep6pflag( void ) interrupt 0
+ 377          {
+ 378   1      }
+ 379          void ISR_Ep8pflag( void ) interrupt 0
+ 380          {
+ 381   1      }
+ 382          void ISR_Ep2eflag( void ) interrupt 0
+ 383          {
+ 384   1      }
+ 385          void ISR_Ep4eflag( void ) interrupt 0
+ 386          {
+ 387   1      }
+ 388          void ISR_Ep6eflag( void ) interrupt 0
+ 389          {
+ 390   1      }
+ 391          void ISR_Ep8eflag( void ) interrupt 0
+ 392          {
+ 393   1      }
+ 394          void ISR_Ep2fflag( void ) interrupt 0
+ 395          {
+ 396   1      }
+ 397          void ISR_Ep4fflag( void ) interrupt 0
+ 398          {
+ 399   1      }
+ 400          void ISR_Ep6fflag( void ) interrupt 0
+ 401          {
+ 402   1      }
+ 403          void ISR_Ep8fflag( void ) interrupt 0
+ 404          {
+ 405   1      }
+ 406          void ISR_GpifComplete( void ) interrupt 0
+ 407          {
+ 408   1      }
+ 409          void ISR_GpifWaveform( void ) interrupt 0
+ 410          {
+ 411   1      }
+ 412          
+ 413          // ...debug LEDs: accessed via movx reads only ( through CPLD )
+ 414          // it may be worth noting here that the default monitor loads at 0xC000
+ 415          xdata volatile const BYTE LED0_ON  _at_ 0x8000;
+ 416          xdata volatile const BYTE LED0_OFF _at_ 0x8100;
+ 417          xdata volatile const BYTE LED1_ON  _at_ 0x9000;
+ 418          xdata volatile const BYTE LED1_OFF _at_ 0x9100;
+ 419          xdata volatile const BYTE LED2_ON  _at_ 0xA000;
+ 420          xdata volatile const BYTE LED2_OFF _at_ 0xA100;
+ 421          xdata volatile const BYTE LED3_ON  _at_ 0xB000;
+ 422          xdata volatile const BYTE LED3_OFF _at_ 0xB100;
+ 423          // use this global variable when (de)asserting debug LEDs...
+ 424          BYTE xdata ledX_rdvar = 0x00;
+ 425          BYTE xdata LED_State = 0;
+ 426          void LED_Off (BYTE LED_Mask)
+ 427          {
+C51 COMPILER V7.07   SLAVE                                                                 10/22/2021 20:13:05 PAGE 8   
+
+ 428   1              if (LED_Mask & bmBIT0)
+ 429   1              {
+ 430   2                      ledX_rdvar = LED0_OFF;
+ 431   2                      LED_State &= ~bmBIT0;
+ 432   2              }
+ 433   1              if (LED_Mask & bmBIT1)
+ 434   1              {
+ 435   2                      ledX_rdvar = LED1_OFF;
+ 436   2                      LED_State &= ~bmBIT1;
+ 437   2              }
+ 438   1              if (LED_Mask & bmBIT2)
+ 439   1              {
+ 440   2                      ledX_rdvar = LED2_OFF;
+ 441   2                      LED_State &= ~bmBIT2;
+ 442   2              }
+ 443   1              if (LED_Mask & bmBIT3)
+ 444   1              {
+ 445   2                      ledX_rdvar = LED3_OFF;
+ 446   2                      LED_State &= ~bmBIT3;
+ 447   2              }
+ 448   1      }
+ 449          
+ 450          void LED_On (BYTE LED_Mask)
+ 451          {
+ 452   1              if (LED_Mask & bmBIT0)
+ 453   1              {
+ 454   2                      ledX_rdvar = LED0_ON;
+ 455   2                      LED_State |= bmBIT0;
+ 456   2              }
+ 457   1              if (LED_Mask & bmBIT1)
+ 458   1              {
+ 459   2                      ledX_rdvar = LED1_ON;
+ 460   2                      LED_State |= bmBIT1;
+ 461   2              }
+ 462   1              if (LED_Mask & bmBIT2)
+ 463   1              {
+ 464   2                      ledX_rdvar = LED2_ON;
+ 465   2                      LED_State |= bmBIT2;
+ 466   2              }
+ 467   1              if (LED_Mask & bmBIT3)
+ 468   1              {
+ 469   2                      ledX_rdvar = LED3_ON;
+ 470   2                      LED_State |= bmBIT3;
+ 471   2              }
+ 472   1      }
+ 473          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    653    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      5    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

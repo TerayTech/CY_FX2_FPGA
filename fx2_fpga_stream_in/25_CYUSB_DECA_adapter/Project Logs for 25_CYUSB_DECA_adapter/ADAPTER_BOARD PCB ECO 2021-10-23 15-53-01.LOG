@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=D27 Pin=JP4-2
+Added Pin To Net: NetName=IFCLK Pin=JP1-5
+Added Pin To Net: NetName=IFCLK Pin=JP4-2
+Added Net: Name=IFCLK

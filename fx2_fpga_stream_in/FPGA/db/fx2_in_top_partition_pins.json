@@ -1,0 +1,109 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "fx2_fdata[0]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[1]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[2]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[3]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[4]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[5]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[6]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[7]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[8]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[9]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[10]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[11]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[12]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[13]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[14]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[15]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_slwr",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_flagc",
+					"strict" : false
+				},
+				{
+					"name" : "tx_trigger",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_ifclk",
+					"strict" : false
+				},
+				{
+					"name" : "reset_n",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tms",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tck",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdi",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdo",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

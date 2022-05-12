@@ -1,0 +1,4 @@
+﻿cl : 命令行 warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  ChipID.cpp
+C:\Users\TerayTech\Desktop\Console\ChipID.cpp(94,21): warning C4018: “<”: 有符号/无符号不匹配
+  ChipID.vcxproj -> C:\Users\TerayTech\Desktop\Console\Debug\ChipID.exe

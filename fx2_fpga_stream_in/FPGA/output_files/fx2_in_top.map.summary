@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Mon Oct 25 14:21:40 2021
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Standard Edition
+Revision Name : fx2_in_top
+Top-level Entity Name : fx2_in_top
+Family : MAX 10
+Total logic elements : 1,032
+    Total combinational functions : 602
+    Dedicated logic registers : 804
+Total registers : 804
+Total pins : 27
+Total virtual pins : 0
+Total memory bits : 110,592
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0
+UFM blocks : 0
+ADC blocks : 0

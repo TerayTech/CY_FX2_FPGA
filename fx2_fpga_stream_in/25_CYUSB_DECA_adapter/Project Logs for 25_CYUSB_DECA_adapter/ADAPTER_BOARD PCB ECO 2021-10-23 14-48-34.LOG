@@ -1,0 +1,172 @@
+Added Component: Designator=JP1(header2X18)
+Added Component: Designator=JP2(header2X24)
+Added Component: Designator=JP3(header2X24)
+Added Pin To Net: NetName=ADDR0 Pin=JP1-13
+Added Pin To Net: NetName=ADDR0 Pin=JP2-22
+Added Pin To Net: NetName=ADDR0 Pin=JP3-22
+Added Net: Name=ADDR0
+Added Pin To Net: NetName=ADDR1 Pin=JP1-14
+Added Pin To Net: NetName=ADDR1 Pin=JP2-21
+Added Pin To Net: NetName=ADDR1 Pin=JP3-21
+Added Net: Name=ADDR1
+Added Pin To Net: NetName=CLKOUT Pin=JP1-7
+Added Pin To Net: NetName=CLKOUT Pin=JP2-28
+Added Pin To Net: NetName=CLKOUT Pin=JP3-28
+Added Net: Name=CLKOUT
+Added Pin To Net: NetName=D0 Pin=JP1-32
+Added Pin To Net: NetName=D0 Pin=JP2-3
+Added Pin To Net: NetName=D0 Pin=JP3-3
+Added Net: Name=D0
+Added Pin To Net: NetName=D1 Pin=JP1-31
+Added Pin To Net: NetName=D1 Pin=JP2-4
+Added Pin To Net: NetName=D1 Pin=JP3-4
+Added Net: Name=D1
+Added Pin To Net: NetName=D2 Pin=JP1-30
+Added Pin To Net: NetName=D2 Pin=JP2-5
+Added Pin To Net: NetName=D2 Pin=JP3-5
+Added Net: Name=D2
+Added Pin To Net: NetName=D3 Pin=JP1-29
+Added Pin To Net: NetName=D3 Pin=JP2-6
+Added Pin To Net: NetName=D3 Pin=JP3-6
+Added Net: Name=D3
+Added Pin To Net: NetName=D4 Pin=JP1-28
+Added Pin To Net: NetName=D4 Pin=JP2-7
+Added Pin To Net: NetName=D4 Pin=JP3-7
+Added Net: Name=D4
+Added Pin To Net: NetName=D5 Pin=JP1-27
+Added Pin To Net: NetName=D5 Pin=JP2-8
+Added Pin To Net: NetName=D5 Pin=JP3-8
+Added Net: Name=D5
+Added Pin To Net: NetName=D6 Pin=JP1-26
+Added Pin To Net: NetName=D6 Pin=JP2-9
+Added Pin To Net: NetName=D6 Pin=JP3-9
+Added Net: Name=D6
+Added Pin To Net: NetName=D7 Pin=JP1-25
+Added Pin To Net: NetName=D7 Pin=JP2-10
+Added Pin To Net: NetName=D7 Pin=JP3-10
+Added Net: Name=D7
+Added Pin To Net: NetName=D8 Pin=JP1-24
+Added Pin To Net: NetName=D8 Pin=JP2-11
+Added Pin To Net: NetName=D8 Pin=JP3-11
+Added Net: Name=D8
+Added Pin To Net: NetName=D9 Pin=JP1-23
+Added Pin To Net: NetName=D9 Pin=JP2-12
+Added Pin To Net: NetName=D9 Pin=JP3-12
+Added Net: Name=D9
+Added Pin To Net: NetName=D10 Pin=JP1-22
+Added Pin To Net: NetName=D10 Pin=JP2-13
+Added Pin To Net: NetName=D10 Pin=JP3-13
+Added Net: Name=D10
+Added Pin To Net: NetName=D11 Pin=JP1-21
+Added Pin To Net: NetName=D11 Pin=JP2-14
+Added Pin To Net: NetName=D11 Pin=JP3-14
+Added Net: Name=D11
+Added Pin To Net: NetName=D12 Pin=JP1-20
+Added Pin To Net: NetName=D12 Pin=JP2-15
+Added Pin To Net: NetName=D12 Pin=JP3-15
+Added Net: Name=D12
+Added Pin To Net: NetName=D13 Pin=JP1-19
+Added Pin To Net: NetName=D13 Pin=JP2-16
+Added Pin To Net: NetName=D13 Pin=JP3-16
+Added Net: Name=D13
+Added Pin To Net: NetName=D14 Pin=JP1-18
+Added Pin To Net: NetName=D14 Pin=JP2-17
+Added Pin To Net: NetName=D14 Pin=JP3-17
+Added Net: Name=D14
+Added Pin To Net: NetName=D15 Pin=JP1-17
+Added Pin To Net: NetName=D15 Pin=JP2-18
+Added Pin To Net: NetName=D15 Pin=JP3-18
+Added Net: Name=D15
+Added Pin To Net: NetName=D16 Pin=JP1-16
+Added Pin To Net: NetName=D16 Pin=JP2-19
+Added Pin To Net: NetName=D16 Pin=JP3-19
+Added Net: Name=D16
+Added Pin To Net: NetName=D17 Pin=JP1-15
+Added Pin To Net: NetName=D17 Pin=JP2-20
+Added Pin To Net: NetName=D17 Pin=JP3-20
+Added Net: Name=D17
+Added Pin To Net: NetName=D20 Pin=JP1-12
+Added Pin To Net: NetName=D20 Pin=JP2-23
+Added Pin To Net: NetName=D20 Pin=JP3-23
+Added Net: Name=D20
+Added Pin To Net: NetName=D21 Pin=JP1-11
+Added Pin To Net: NetName=D21 Pin=JP2-24
+Added Pin To Net: NetName=D21 Pin=JP3-24
+Added Net: Name=D21
+Added Pin To Net: NetName=D22 Pin=JP1-10
+Added Pin To Net: NetName=D22 Pin=JP2-25
+Added Pin To Net: NetName=D22 Pin=JP3-25
+Added Net: Name=D22
+Added Pin To Net: NetName=D23 Pin=JP1-9
+Added Pin To Net: NetName=D23 Pin=JP2-26
+Added Pin To Net: NetName=D23 Pin=JP3-26
+Added Net: Name=D23
+Added Pin To Net: NetName=D24 Pin=JP1-8
+Added Pin To Net: NetName=D24 Pin=JP2-27
+Added Pin To Net: NetName=D24 Pin=JP3-27
+Added Net: Name=D24
+Added Pin To Net: NetName=D26 Pin=JP1-6
+Added Pin To Net: NetName=D26 Pin=JP2-29
+Added Pin To Net: NetName=D26 Pin=JP3-29
+Added Net: Name=D26
+Added Pin To Net: NetName=D27 Pin=JP1-5
+Added Pin To Net: NetName=D27 Pin=JP2-30
+Added Pin To Net: NetName=D27 Pin=JP3-30
+Added Net: Name=D27
+Added Pin To Net: NetName=D28 Pin=JP2-31
+Added Pin To Net: NetName=D28 Pin=JP3-31
+Added Net: Name=D28
+Added Pin To Net: NetName=D29 Pin=JP1-3
+Added Pin To Net: NetName=D29 Pin=JP2-32
+Added Pin To Net: NetName=D29 Pin=JP3-32
+Added Net: Name=D29
+Added Pin To Net: NetName=D30 Pin=JP2-33
+Added Pin To Net: NetName=D30 Pin=JP3-33
+Added Net: Name=D30
+Added Pin To Net: NetName=D31 Pin=JP2-34
+Added Pin To Net: NetName=D31 Pin=JP3-34
+Added Net: Name=D31
+Added Pin To Net: NetName=D32 Pin=JP2-35
+Added Pin To Net: NetName=D32 Pin=JP3-35
+Added Net: Name=D32
+Added Pin To Net: NetName=D33 Pin=JP2-36
+Added Pin To Net: NetName=D33 Pin=JP3-36
+Added Net: Name=D33
+Added Pin To Net: NetName=D34 Pin=JP2-37
+Added Pin To Net: NetName=D34 Pin=JP3-37
+Added Net: Name=D34
+Added Pin To Net: NetName=D35 Pin=JP2-38
+Added Pin To Net: NetName=D35 Pin=JP3-38
+Added Net: Name=D35
+Added Pin To Net: NetName=D36 Pin=JP2-39
+Added Pin To Net: NetName=D36 Pin=JP3-39
+Added Net: Name=D36
+Added Pin To Net: NetName=D37 Pin=JP2-40
+Added Pin To Net: NetName=D37 Pin=JP3-40
+Added Net: Name=D37
+Added Pin To Net: NetName=D38 Pin=JP2-41
+Added Pin To Net: NetName=D38 Pin=JP3-41
+Added Net: Name=D38
+Added Pin To Net: NetName=D39 Pin=JP2-42
+Added Pin To Net: NetName=D39 Pin=JP3-42
+Added Net: Name=D39
+Added Pin To Net: NetName=D40 Pin=JP2-43
+Added Pin To Net: NetName=D40 Pin=JP3-43
+Added Net: Name=D40
+Added Pin To Net: NetName=D41 Pin=JP2-44
+Added Pin To Net: NetName=D41 Pin=JP3-44
+Added Net: Name=D41
+Added Pin To Net: NetName=D42 Pin=JP2-45
+Added Pin To Net: NetName=D42 Pin=JP3-45
+Added Net: Name=D42
+Added Pin To Net: NetName=D43 Pin=JP2-46
+Added Pin To Net: NetName=D43 Pin=JP3-46
+Added Net: Name=D43
+Added Pin To Net: NetName=GND Pin=JP1-33
+Added Pin To Net: NetName=GND Pin=JP1-34
+Added Pin To Net: NetName=GND Pin=JP2-1
+Added Pin To Net: NetName=GND Pin=JP2-2
+Added Pin To Net: NetName=GND Pin=JP3-1
+Added Pin To Net: NetName=GND Pin=JP3-2
+Added Net: Name=GND
+Added Class: Name=MAIN

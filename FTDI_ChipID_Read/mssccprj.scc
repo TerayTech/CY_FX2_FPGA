@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[ChipID.dsp]
+SCC_Aux_Path = "C:\Development\SSAFE\ChipID"
+SCC_Project_Name = "$/DLL/Samples/Samples/C++/Console/ChipID", TCAAAAAA
+
+[ChipID.dsw]
+SCC_Aux_Path = "C:\Development\SSAFE\ChipID"
+SCC_Project_Name = "$/DLL/Samples/Samples/C++/Console/ChipID", TCAAAAAA

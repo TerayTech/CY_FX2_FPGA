@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Sat Oct 23 15:14:02 2021
+Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Standard Edition
+Revision Name : top_stream_out
+Top-level Entity Name : top_stream_out
+Family : MAX 10
+Total logic elements : 1,357
+    Total combinational functions : 674
+    Dedicated logic registers : 1,098
+Total registers : 1098
+Total pins : 54
+Total virtual pins : 0
+Total memory bits : 409,600
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 0
+UFM blocks : 0
+ADC blocks : 0

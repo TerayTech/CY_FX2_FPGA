@@ -1,0 +1,4 @@
+fw.obj,dscr.obj, CYStream.obj, 
+..\lib\USBJmpTb.obj, 
+..\lib\EZUSB.lib  
+TO CYStream RAMSIZE(256) PL(68) PW(78) CODE(80h) XDATA(1C00h)  

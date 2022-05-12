@@ -1,0 +1,4 @@
+﻿main.obj : error LNK2019: 无法解析的外部符号 "public: __thiscall CCyUSBDevice::CCyUSBDevice(void *,struct _GUID,int)" (??0CCyUSBDevice@@QAE@PAXU_GUID@@H@Z)，函数 _main 中引用了该符号
+main.obj : error LNK2019: 无法解析的外部符号 "public: unsigned char __thiscall CCyUSBDevice::DeviceCount(void)" (?DeviceCount@CCyUSBDevice@@QAEEXZ)，函数 _main 中引用了该符号
+cyapi_lib\CyAPI.lib : warning LNK4272: 库计算机类型“x64”与目标计算机类型“x86”冲突
+E:\OneDrive - mil0\2022PROJECTS\12_CYAPI_HW\CYAPI_Helloworld\Debug\CYAPI_Helloworld.exe : fatal error LNK1120: 2 个无法解析的外部命令

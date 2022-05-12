@@ -1,0 +1,6 @@
+
+State Machine - |top_stream_out|usb_stream_out:stream_inst1|current_stream_out_state
+Name current_stream_out_state.stream_out_idle current_stream_out_state.stream_out_wait current_stream_out_state.stream_out_read 
+current_stream_out_state.stream_out_wait 0 0 0 
+current_stream_out_state.stream_out_read 0 1 1 
+current_stream_out_state.stream_out_idle 1 1 0 

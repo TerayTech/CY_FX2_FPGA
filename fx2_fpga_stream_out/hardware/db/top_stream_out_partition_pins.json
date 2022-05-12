@@ -1,0 +1,201 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "led[3]",
+					"strict" : false
+				},
+				{
+					"name" : "led[4]",
+					"strict" : false
+				},
+				{
+					"name" : "led[5]",
+					"strict" : false
+				},
+				{
+					"name" : "led[7]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_sloe",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_slrd",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[0]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[1]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[2]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[3]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[4]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[5]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[6]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[7]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[8]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[9]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[10]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[11]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[12]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[13]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[14]",
+					"strict" : false
+				},
+				{
+					"name" : "data_out[15]",
+					"strict" : false
+				},
+				{
+					"name" : "data_valid",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_flagb",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_flagc",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_ifclk",
+					"strict" : false
+				},
+				{
+					"name" : "rst_n",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[0]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[1]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[2]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[3]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[4]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[5]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[6]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[7]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[8]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[9]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[10]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[11]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[12]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[13]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[14]",
+					"strict" : false
+				},
+				{
+					"name" : "fx2_fdata[15]",
+					"strict" : false
+				},
+				{
+					"name" : "rx_trigger",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tms",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tck",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdi",
+					"strict" : false
+				},
+				{
+					"name" : "altera_reserved_tdo",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,5 @@
+Change Component Designator: OldDesignator=DECA P8 DEBUG ADAPTER NewDesignator=JP3
+Added Component: Designator=JP4(header2)
+Added Pin To Net: NetName=GND Pin=JP4-1
+Added Pin To Net: NetName=D27 Pin=JP4-2
+Added Member To Class: ClassName=MAIN Member=Component JP4 header
